@@ -14,7 +14,9 @@ class OrderTest {
 
     @BeforeEach
     void setUp() {
-        proposal = new Proposal(1, 1, 2);
+        PositionAndPrice positionAndPrice = new PositionAndPrice(1, 2, AircraftCabin.FIRST_CLASS);
+        FlightInfo flightInfo = new FlightInfo(1, "a", "b", 123, 456);
+        proposal = new Proposal(1, flightInfo, positionAndPrice);
         contactor = new Contactor("123456");
     }
 

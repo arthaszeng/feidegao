@@ -17,6 +17,6 @@ public class Order {
         this.passengers = passengers;
         this.proposal = proposal;
         this.amount = passengers.size();
-        this.price = proposal.getPrice() * passengers.size();
+        this.price = proposal.getPositionAndPrice().getPrice() * passengers.size();
     }
 }

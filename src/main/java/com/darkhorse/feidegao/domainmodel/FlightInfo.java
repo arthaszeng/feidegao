@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class FlightInfo {
+    private int id;
     private String from;
     private String to;
     private int takeoffAt;

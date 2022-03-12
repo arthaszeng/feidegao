@@ -1,9 +1,6 @@
 package com.darkhorse.feidegao.domainservice;
 
-import com.darkhorse.feidegao.domainmodel.Contactor;
-import com.darkhorse.feidegao.domainmodel.Order;
-import com.darkhorse.feidegao.domainmodel.Passenger;
-import com.darkhorse.feidegao.domainmodel.Proposal;
+import com.darkhorse.feidegao.domainmodel.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,8 +14,10 @@ class OrderDomainServiceTest {
     void should_generate_an_order_successfully_when_provide_correct_params() {
         OrderDomainService orderDomainService = new OrderDomainService();
 
+        PositionAndPrice positionAndPrice = new PositionAndPrice(1, 2, AircraftCabin.FIRST_CLASS);
+        FlightInfo flightInfo = new FlightInfo(1, "a", "b", 123, 456);
         Contactor contactor = new Contactor("123456");
-        Proposal proposal = new Proposal(1, 2, 3);
+        Proposal proposal = new Proposal(1, flightInfo, positionAndPrice);
         Passenger alice = new Passenger("Alice", "111");
         Passenger bob = new Passenger("Bob", "222");
         List<Passenger> passengers = asList(alice, bob);
@@ -28,7 +27,7 @@ class OrderDomainServiceTest {
         assertEquals(contactor, order.getContactor());
         assertEquals(passengers, order.getPassengers());
         assertEquals(passengers.size(), order.getAmount());
-        assertEquals(passengers.size() * proposal.getPrice(), order.getPrice());
+        assertEquals(2, order.getPrice());
         assertEquals(proposal, order.getProposal());
     }
 }

@@ -7,5 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PositionAndPrice {
     private int price;
+    private int availableAmount;
     private AircraftCabin classType;
 }
