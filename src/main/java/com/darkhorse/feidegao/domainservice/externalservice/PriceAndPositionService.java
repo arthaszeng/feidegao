@@ -1,4 +1,4 @@
-package com.darkhorse.feidegao.domainservice;
+package com.darkhorse.feidegao.domainservice.externalservice;
 
 import com.darkhorse.feidegao.domainmodel.PositionAndPrice;
 
