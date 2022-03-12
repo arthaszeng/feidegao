@@ -31,7 +31,7 @@ class OrderApplicationServiceTest {
     }
 
     @Test
-    void should_create_and_save_order_when_create_order_given_valid_input() {
+    void should_and_save_order_when_create_order_given_valid_input() {
         String flightId = "1";
         FlightInfo flightInfo = new FlightInfo(flightId, "Beijing", "Shanghai", Instant.now(), Instant.now(), Instant.now());
         Contactor contactor = new Contactor("1", "15888888888");

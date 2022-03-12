@@ -2,7 +2,7 @@ package com.darkhorse.feidegao.infrastructure.externalserviceimpl;
 
 import com.darkhorse.feidegao.domainmodel.FlightInfo;
 import com.darkhorse.feidegao.domainservice.externalservice.FlightInfoService;
-import com.darkhorse.feidegao.infrastructure.externalserviceimpl.model.Flight;
+import com.darkhorse.feidegao.infrastructure.externalserviceimpl.model.FlightResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class FlightInfoServiceImpl implements FlightInfoService {
     @Override
     public FlightInfo getFlightInfoById(String flightId) {
         String url = flightServiceHost + FLIGHT_INFO_URI + "/" + flightId;
-        return Objects.requireNonNull(restTemplate.getForObject(url, Flight.class)).to();
+        return Objects.requireNonNull(restTemplate.getForObject(url, FlightResponse.class)).to();
     }
 
 }

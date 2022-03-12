@@ -3,11 +3,10 @@ package com.darkhorse.feidegao.infrastructure.externalserviceimpl;
 import com.darkhorse.feidegao.domainmodel.FlightInfo;
 import com.darkhorse.feidegao.infrastructure.externalserviceimpl.exception.ExternalServiceNotAvailableException;
 import com.darkhorse.feidegao.infrastructure.externalserviceimpl.exception.InvalidRequestException;
-import com.darkhorse.feidegao.infrastructure.externalserviceimpl.model.Flight;
+import com.darkhorse.feidegao.infrastructure.externalserviceimpl.model.FlightResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import com.sun.jdi.request.InvalidRequestStateException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ class FlightInfoServiceImplTest {
         String id = "1";
         String from = "Beijing";
         String to = "Shanghai";
-        Flight flight = new Flight(id, from, to, parseToString(takeoffAt), parseToString(arriveAt), parseToString(createdAt));
+        FlightResponse flight = new FlightResponse(id, from, to, parseToString(takeoffAt), parseToString(arriveAt), parseToString(createdAt));
 
         stubFor(get(FLIGHT_INFO_URI + "/" + id).willReturn(okJson(new ObjectMapper().writeValueAsString(flight))));
 

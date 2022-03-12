@@ -10,7 +10,7 @@ import static com.darkhorse.feidegao.infrastructure.config.InstantDeserializer.p
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Flight {
+public class FlightResponse {
     private String id;
     private String from;
     private String to;
