@@ -23,7 +23,7 @@ public class OrderApplicationService {
     private OrderRepository orderRepository;
 
     public void createOrder(Proposal proposal, Contactor contactor, List<Passenger> passengers) {
-        int flightId = proposal.getFlightInfo().getId();
+        String flightId = proposal.getFlightInfo().getId();
 
         verifyFlightInfo(proposal, flightId);
         verifyPositionAndPrice(proposal, flightId);
@@ -33,7 +33,7 @@ public class OrderApplicationService {
         orderRepository.save(order);
     }
 
-    private void verifyPositionAndPrice(Proposal proposal, int flightId) {
+    private void verifyPositionAndPrice(Proposal proposal, String flightId) {
         boolean noneMatch = positionAndPriceService.getPriceAndPositionsById(flightId).stream()
                 .noneMatch(positionAndPrice -> positionAndPrice.getClassType().equals(proposal.getPositionAndPrice().getClassType())
                         && positionAndPrice.getPrice() == proposal.getPositionAndPrice().getPrice()
@@ -44,7 +44,7 @@ public class OrderApplicationService {
         }
     }
 
-    private void verifyFlightInfo(Proposal proposal, int flightId) {
+    private void verifyFlightInfo(Proposal proposal, String flightId) {
         FlightInfo flightInfo = flightInfoService.getFlightInfoById(flightId);
 
         if (!flightInfo.equals(proposal.getFlightInfo())) {

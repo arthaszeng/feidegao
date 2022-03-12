@@ -1,17 +1,29 @@
 package com.darkhorse.feidegao.domainservice;
 
-import com.darkhorse.feidegao.domainmodel.Contactor;
-import com.darkhorse.feidegao.domainmodel.Order;
-import com.darkhorse.feidegao.domainmodel.Passenger;
-import com.darkhorse.feidegao.domainmodel.Proposal;
+import com.darkhorse.feidegao.domainmodel.*;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
+@Component
 public class OrderDomainService {
 
     public Order createOrder(Proposal proposal, List<Passenger> passengers, Contactor contactor) {
-        return new Order(contactor, passengers, proposal);
+        int passengerCount = passengers.size();
+        int singlePrice = proposal.getPositionAndPrice().getPrice();
+        int totalPrice = singlePrice * passengerCount;
+
+        return new Order(UUID.randomUUID().toString(),
+                contactor,
+                passengers,
+                proposal.getId(),
+                totalPrice,
+                passengerCount,
+                OrderStatus.CREATED,
+                Instant.now());
     }
 }

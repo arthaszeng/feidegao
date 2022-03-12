@@ -6,5 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class Contactor {
+    private String id;
     private String phoneNumber;
 }
