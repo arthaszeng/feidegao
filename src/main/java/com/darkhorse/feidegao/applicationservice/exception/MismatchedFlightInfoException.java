@@ -1,4 +1,4 @@
 package com.darkhorse.feidegao.applicationservice.exception;
 
-public class MismatchedFlightInfoException extends RuntimeException {
+public class MismatchedFlightInfoException extends AppException {
 }

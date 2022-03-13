@@ -1,4 +1,4 @@
 package com.darkhorse.feidegao.applicationservice.exception;
 
-public class MismatchedPositionAndPriceException extends RuntimeException {
+public class MismatchedPositionAndPriceException extends AppException {
 }

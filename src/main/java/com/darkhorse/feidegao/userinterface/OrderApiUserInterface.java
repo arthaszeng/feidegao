@@ -1,6 +1,7 @@
 package com.darkhorse.feidegao.userinterface;
 
 import com.darkhorse.feidegao.applicationservice.OrderApplicationService;
+import com.darkhorse.feidegao.applicationservice.exception.AppException;
 import com.darkhorse.feidegao.domainmodel.Order;
 import com.darkhorse.feidegao.userinterface.command.CreateOrderCommand;
 import com.darkhorse.feidegao.userinterface.representation.OrderRepresentation;
@@ -31,8 +32,13 @@ public class OrderApiUserInterface {
         try {
             Order order = orderApplicationService.createOrder(pid, command.getContactor(), command.getPassengers());
             return new ResponseEntity<>(OrderRepresentation.from(order), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception exception) {
+            if (exception instanceof AppException) {
+
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 }
