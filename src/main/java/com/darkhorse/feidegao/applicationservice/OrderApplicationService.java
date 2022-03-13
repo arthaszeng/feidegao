@@ -5,6 +5,7 @@ import com.darkhorse.feidegao.applicationservice.exception.MismatchedFlightInfoE
 import com.darkhorse.feidegao.applicationservice.exception.MismatchedPositionAndPriceException;
 import com.darkhorse.feidegao.domainmodel.*;
 import com.darkhorse.feidegao.domainservice.OrderDomainService;
+import com.darkhorse.feidegao.domainservice.repository.ProposalRepository;
 import com.darkhorse.feidegao.domainservice.externalservice.FlightInfoService;
 import com.darkhorse.feidegao.domainservice.externalservice.PositionAndPriceService;
 import com.darkhorse.feidegao.domainservice.repository.OrderRepository;
@@ -18,11 +19,13 @@ import java.util.List;
 public class OrderApplicationService {
 
     private OrderDomainService orderDomainService;
+    private ProposalRepository proposalRepository;
     private PositionAndPriceService positionAndPriceService;
     private FlightInfoService flightInfoService;
     private OrderRepository orderRepository;
 
-    public void createOrder(Proposal proposal, Contactor contactor, List<Passenger> passengers) {
+    public Order createOrder(String proposalId, Contactor contactor, List<Passenger> passengers) {
+        Proposal proposal = proposalRepository.getProposalById(proposalId);
         String flightId = proposal.getFlightInfo().getId();
 
         verifyFlightInfo(proposal, flightId);
@@ -31,6 +34,8 @@ public class OrderApplicationService {
         Order order = orderDomainService.createOrder(proposal, passengers, contactor);
 
         orderRepository.save(order);
+
+        return order;
     }
 
     private void verifyPositionAndPrice(Proposal proposal, String flightId) {

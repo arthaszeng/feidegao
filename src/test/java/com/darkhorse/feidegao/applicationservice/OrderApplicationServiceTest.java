@@ -5,6 +5,7 @@ import com.darkhorse.feidegao.domainservice.OrderDomainService;
 import com.darkhorse.feidegao.domainservice.externalservice.FlightInfoService;
 import com.darkhorse.feidegao.domainservice.externalservice.PositionAndPriceService;
 import com.darkhorse.feidegao.domainservice.repository.OrderRepository;
+import com.darkhorse.feidegao.domainservice.repository.ProposalRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,30 +21,34 @@ class OrderApplicationServiceTest {
     private PositionAndPriceService positionAndPriceService;
     private FlightInfoService flightInfoService;
     private OrderRepository orderRepository;
+    private ProposalRepository proposalRepository;
     private OrderApplicationService orderApplicationService;
 
     @BeforeEach
     void setUp() {
         positionAndPriceService = mock(PositionAndPriceService.class);
         flightInfoService = mock(FlightInfoService.class);
+        proposalRepository = mock(ProposalRepository.class);
         orderRepository = spy(OrderRepository.class);
-        orderApplicationService = new OrderApplicationService(new OrderDomainService(), positionAndPriceService, flightInfoService, orderRepository);
+        orderApplicationService = new OrderApplicationService(new OrderDomainService(), proposalRepository, positionAndPriceService, flightInfoService, orderRepository);
     }
 
     @Test
     void should_and_save_order_when_create_order_given_valid_input() {
-        String flightId = "1";
+        String flightId = "flightId";
+        String proposalId = "proposalId";
         FlightInfo flightInfo = new FlightInfo(flightId, "Beijing", "Shanghai", Instant.now(), Instant.now(), Instant.now());
-        Contactor contactor = new Contactor("1", "15888888888");
+        Contactor contactor = new Contactor("contractId", "15888888888");
         PositionAndPrice firstClassPositionAndPrice = new PositionAndPrice(1, 10, AircraftCabin.FIRST_CLASS);
-        Proposal proposal = new Proposal("1", flightInfo, firstClassPositionAndPrice);
-        List<Passenger> passengers = asList(new Passenger("1", "Alice", "123"), new Passenger("1", "Bob", "456"));
+        Proposal proposal = new Proposal(proposalId, flightInfo, firstClassPositionAndPrice);
+        List<Passenger> passengers = asList(new Passenger("aliceId", "Alice", "123"), new Passenger("bobId", "Bob", "456"));
 
+        when(proposalRepository.getProposalById(proposalId)).thenReturn(proposal);
         when(positionAndPriceService.getPriceAndPositionsById(flightId)).thenReturn(Collections.singletonList(firstClassPositionAndPrice));
         when(flightInfoService.getFlightInfoById(flightId)).thenReturn(flightInfo);
 
-        orderApplicationService.createOrder(proposal, contactor, passengers);
+        Order order = orderApplicationService.createOrder(proposalId, contactor, passengers);
 
-        verify(orderRepository).save(any(Order.class));
+        verify(orderRepository).save(order);
     }
 }
