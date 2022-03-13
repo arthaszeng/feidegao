@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
 public class OrderApiUserInterface {
 
@@ -25,10 +23,13 @@ public class OrderApiUserInterface {
 
     @PostMapping(path = "/proposals/{pid}/orders")
     public ResponseEntity<OrderRepresentation> createOrder(@PathVariable String pid,
-                                                           @Valid @RequestBody CreateOrderCommand command) {
+                                                           @RequestBody CreateOrderCommand command) {
+        if (!command.validate()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         Order order = orderApplicationService.createOrder(pid, command.getContactor(), command.getPassengers());
 
-        return new ResponseEntity<>(OrderRepresentation.from(order),HttpStatus.CREATED);
+        return new ResponseEntity<>(OrderRepresentation.from(order), HttpStatus.CREATED);
     }
 }

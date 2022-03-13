@@ -84,8 +84,7 @@ class OrderApiUserInterfaceTest {
                 "   \"createdAt\":\"2022-03-21 10:30:00\"\n" +
                 "}")));
 
-        final CreateOrderCommand createProductCommand;
-        createProductCommand = new CreateOrderCommand(new CreateOrderCommand.ContactorCommand("15888888888"),
+        CreateOrderCommand createProductCommand = new CreateOrderCommand(new CreateOrderCommand.ContactorCommand("15888888888"),
                 asList(new CreateOrderCommand.PassengerCommand("Alice", "5111111111111111"),
                         new CreateOrderCommand.PassengerCommand("Bob", "5222222222222222")));
 
@@ -106,5 +105,66 @@ class OrderApiUserInterfaceTest {
                 .body("price", is(2000))
                 .body("amount", is(2))
                 .body("createdAt", is(parseToString(Instant.now())));
+    }
+
+    @Test
+    void should_return_400_when_contactor_phone_number_is_empty() {
+        CreateOrderCommand createProductCommand = new CreateOrderCommand(new CreateOrderCommand.ContactorCommand(""),
+                asList(new CreateOrderCommand.PassengerCommand("Alice", "5111111111111111"),
+                        new CreateOrderCommand.PassengerCommand("Bob", "5222222222222222")));
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(createProductCommand)
+                .post("/proposals/{pid}/orders", 12)
+                .then()
+                .statusCode(400);
+    }
+
+
+    @Test
+    void should_return_400_when_contactor_phone_number_has_20_length() {
+        CreateOrderCommand createProductCommand = new CreateOrderCommand(new CreateOrderCommand.ContactorCommand("5111111111111111111"),
+                asList(new CreateOrderCommand.PassengerCommand("Alice", "5111111111111111"),
+                        new CreateOrderCommand.PassengerCommand("Bob", "5222222222222222")));
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(createProductCommand)
+                .post("/proposals/{pid}/orders", 12)
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    void should_return_400_when_request_contains_two_same_passenger_id() {
+        CreateOrderCommand createProductCommand = new CreateOrderCommand(new CreateOrderCommand.ContactorCommand("15888888888"),
+                asList(new CreateOrderCommand.PassengerCommand("Alice", "5111111111111111"),
+                        new CreateOrderCommand.PassengerCommand("Bob", "5111111111111111")));
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(createProductCommand)
+                .post("/proposals/{pid}/orders", 12)
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    void should_return_400_when_passenger_id_number_is_empty() {
+        CreateOrderCommand createProductCommand = new CreateOrderCommand(new CreateOrderCommand.ContactorCommand("15888888888"),
+                asList(new CreateOrderCommand.PassengerCommand("Alice", ""),
+                        new CreateOrderCommand.PassengerCommand("Bob", "5111111111111111")));
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(createProductCommand)
+                .post("/proposals/{pid}/orders", 12)
+                .then()
+                .statusCode(400);
     }
 }
