@@ -167,4 +167,55 @@ class OrderApiUserInterfaceTest {
                 .then()
                 .statusCode(400);
     }
+
+    @Test
+    void should_return_400_when_no_enough_position_left() {
+        String proposalId = "12";
+
+        Mockito.when(proposalRepository.getProposalById("12")).thenReturn(new Proposal("12",
+                new FlightInfo("13",
+                        "Beijing",
+                        "Shanghai",
+                        parseToInstant("2022-03-22 10:30:00"),
+                        parseToInstant("2022-03-22 12:30:00"),
+                        parseToInstant("2022-03-21 10:30:00")),
+                new PositionAndPrice(1000, 20, AircraftCabin.FIRST_CLASS)
+        ));
+
+        stubFor(get(POSITION_AND_PRICE_URI + "/" + 13).willReturn(okJson("" +
+                "[\n" +
+                "  {\n" +
+                "    \"price\": 1000,\n" +
+                "    \"availableAmount\": 1,\n" +
+                "    \"classType\": \"FIRST_CLASS\"\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"price\": 500,\n" +
+                "    \"availableAmount\": 1,\n" +
+                "    \"classType\": \"ECONOMY_CLASS\"\n" +
+                "  }\n" +
+                "]")));
+
+        stubFor(get(FLIGHT_INFO_URI + "/" + 13).willReturn(okJson("" +
+                "{\n" +
+                "   \"id\":\"13\",\n" +
+                "   \"from\":\"Beijing\",\n" +
+                "   \"to\":\"Shanghai\",\n" +
+                "   \"takeoffAt\":\"2022-03-22 10:30:00\",\n" +
+                "   \"arriveAt\":\"2022-03-22 12:30:00\",\n" +
+                "   \"createdAt\":\"2022-03-21 10:30:00\"\n" +
+                "}")));
+
+        CreateOrderCommand createProductCommand = new CreateOrderCommand(new CreateOrderCommand.ContactorCommand("15888888888"),
+                asList(new CreateOrderCommand.PassengerCommand("Alice", "5111111111111111"),
+                        new CreateOrderCommand.PassengerCommand("Bob", "5222222222222222")));
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(createProductCommand)
+                .post("/proposals/{pid}/orders", proposalId)
+                .then()
+                .statusCode(400);
+    }
 }

@@ -28,8 +28,11 @@ public class OrderApiUserInterface {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Order order = orderApplicationService.createOrder(pid, command.getContactor(), command.getPassengers());
-
-        return new ResponseEntity<>(OrderRepresentation.from(order), HttpStatus.CREATED);
+        try {
+            Order order = orderApplicationService.createOrder(pid, command.getContactor(), command.getPassengers());
+            return new ResponseEntity<>(OrderRepresentation.from(order), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
