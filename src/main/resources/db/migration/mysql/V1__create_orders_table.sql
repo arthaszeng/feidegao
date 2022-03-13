@@ -6,5 +6,7 @@ CREATE TABLE `orders`
     `proposal_id`  VARCHAR(256) NOT NULL,
     `price`        INT UNSIGNED NOT NULL,
     `amount`       INT UNSIGNED NOT NULL,
-    `created_at`   TIMESTAMP
+    `status`       CHAR(36)     NOT NULL,
+    `created_at`   TIMESTAMP,
+    `payment_id`   CHAR(36) DEFAULT NULL
 )

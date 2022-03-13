@@ -1,6 +1,7 @@
 package com.darkhorse.feidegao.domainservice;
 
 import com.darkhorse.feidegao.domainmodel.*;
+import com.darkhorse.feidegao.domainmodel.PaymentRequest;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,12 @@ public class OrderDomainService {
                 totalPrice,
                 passengerCount,
                 OrderStatus.CREATED,
-                Instant.now());
+                Instant.now(),
+                null
+        );
+    }
+
+    public Order requestPayment(Order order, PaymentRequest paymentRequest) {
+        return order.requestPayment(paymentRequest);
     }
 }

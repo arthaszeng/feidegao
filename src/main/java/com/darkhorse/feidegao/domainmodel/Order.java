@@ -9,12 +9,19 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class Order {
-    private final String id;
-    private final Contactor contactor;
-    private final List<Passenger> passengers;
-    private final String proposalId;
-    private final int price;
-    private final int amount;
-    private final OrderStatus status;
-    private final Instant createdAt;
+    private String id;
+    private Contactor contactor;
+    private List<Passenger> passengers;
+    private String proposalId;
+    private int price;
+    private int amount;
+    private OrderStatus status;
+    private Instant createdAt;
+    private PaymentRequest paymentRequest;
+
+    public Order requestPayment(PaymentRequest paymentRequest) {
+        this.paymentRequest = paymentRequest;
+        this.status = this.status.moveToNext();
+        return this;
+    }
 }

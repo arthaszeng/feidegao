@@ -35,8 +35,9 @@ class OrderRepositoryImplTest {
         Passenger alice = new Passenger("1", "Alice", "111");
         Passenger bob = new Passenger("2", "Bob", "222");
         List<Passenger> passengers = asList(alice, bob);
+        PaymentRequest paymentRequest = new PaymentRequest("uri", 2, Instant.now(), Instant.now());
 
-        Order order = new Order(UUID.randomUUID().toString(), contactor, passengers, proposal.getId(), 3000, 2, OrderStatus.CREATED, Instant.now());
+        Order order = new Order(UUID.randomUUID().toString(), contactor, passengers, proposal.getId(), 3000, 2, OrderStatus.CREATED, Instant.now(), paymentRequest);
 
         orderRepository.save(order);
     }

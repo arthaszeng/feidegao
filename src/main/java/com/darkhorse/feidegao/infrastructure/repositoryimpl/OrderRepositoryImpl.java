@@ -21,4 +21,9 @@ public class OrderRepositoryImpl implements OrderRepository {
     public void save(Order order) {
         jpaRepository.save(OrderEntity.from(order));
     }
+
+    @Override
+    public Order getOrderById(String id) {
+        return OrderEntity.to(jpaRepository.getById(id));
+    }
 }

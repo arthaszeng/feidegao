@@ -3,6 +3,7 @@ package com.darkhorse.feidegao.applicationservice;
 import com.darkhorse.feidegao.domainmodel.*;
 import com.darkhorse.feidegao.domainservice.OrderDomainService;
 import com.darkhorse.feidegao.domainservice.externalservice.FlightInfoService;
+import com.darkhorse.feidegao.domainservice.externalservice.PaymentGateway;
 import com.darkhorse.feidegao.domainservice.externalservice.PositionAndPriceService;
 import com.darkhorse.feidegao.domainservice.repository.OrderRepository;
 import com.darkhorse.feidegao.domainservice.repository.ProposalRepository;
@@ -23,14 +24,21 @@ class OrderApplicationServiceTest {
     private OrderRepository orderRepository;
     private ProposalRepository proposalRepository;
     private OrderApplicationService orderApplicationService;
+    private PaymentGateway paymentGateway;
 
     @BeforeEach
     void setUp() {
+        paymentGateway = mock(PaymentGateway.class);
         positionAndPriceService = mock(PositionAndPriceService.class);
         flightInfoService = mock(FlightInfoService.class);
         proposalRepository = mock(ProposalRepository.class);
         orderRepository = spy(OrderRepository.class);
-        orderApplicationService = new OrderApplicationService(new OrderDomainService(), proposalRepository, positionAndPriceService, flightInfoService, orderRepository);
+        orderApplicationService = new OrderApplicationService(paymentGateway,
+                new OrderDomainService(),
+                proposalRepository,
+                positionAndPriceService,
+                flightInfoService,
+                orderRepository);
     }
 
     @Test

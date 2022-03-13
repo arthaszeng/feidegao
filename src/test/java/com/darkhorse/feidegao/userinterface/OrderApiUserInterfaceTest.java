@@ -1,9 +1,7 @@
 package com.darkhorse.feidegao.userinterface;
 
-import com.darkhorse.feidegao.domainmodel.AircraftCabin;
-import com.darkhorse.feidegao.domainmodel.FlightInfo;
-import com.darkhorse.feidegao.domainmodel.PositionAndPrice;
-import com.darkhorse.feidegao.domainmodel.Proposal;
+import com.darkhorse.feidegao.domainmodel.*;
+import com.darkhorse.feidegao.infrastructure.repositoryimpl.OrderRepositoryImpl;
 import com.darkhorse.feidegao.infrastructure.repositoryimpl.ProposalRepositoryImpl;
 import com.darkhorse.feidegao.userinterface.command.CreateOrderCommand;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
@@ -12,16 +10,19 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
+import java.util.Collections;
 
 import static com.darkhorse.feidegao.infrastructure.config.InstantDeserializer.parseToInstant;
 import static com.darkhorse.feidegao.infrastructure.config.InstantSerializer.parseToString;
 import static com.darkhorse.feidegao.infrastructure.externalserviceimpl.FlightInfoServiceImpl.FLIGHT_INFO_URI;
+import static com.darkhorse.feidegao.infrastructure.externalserviceimpl.PaymentGatewayImpl.PAYMENT_REQUEST_URI;
 import static com.darkhorse.feidegao.infrastructure.externalserviceimpl.PositionAndPriceServiceImpl.POSITION_AND_PRICE_URI;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
@@ -39,6 +40,9 @@ class OrderApiUserInterfaceTest {
 
     @MockBean
     private ProposalRepositoryImpl proposalRepository;
+
+    @Autowired
+    private OrderRepositoryImpl orderRepository;
 
     @BeforeEach
     void beforeEach() {
@@ -319,5 +323,35 @@ class OrderApiUserInterfaceTest {
                 .post("/proposals/{pid}/orders", proposalId)
                 .then()
                 .statusCode(500);
+    }
+
+    @Test
+    void should_request_payment_successfully() {
+        stubFor(post(PAYMENT_REQUEST_URI).willReturn(okJson("" +
+                "{\n" +
+                "   \"uri\":\"/orders/12/payment\",\n" +
+                "   \"amount\":1000,\n" +
+                "   \"createdAt\":\"2022-03-22 10:30:00\",\n" +
+                "   \"expiredAt\":\"2022-03-22 12:30:00\"\n" +
+                "}")));
+
+        orderRepository.save(new Order(
+                "12",
+                new Contactor("1", "15888888888"),
+                Collections.singletonList(new Passenger("1", "Alice", "51111111111111")),
+                "proposalId",
+                1000,
+                1,
+                OrderStatus.CREATED,
+                Instant.now(),
+                null
+        ));
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/orders/{orderId}/payment?method=wechat", 12)
+                .then()
+                .statusCode(201);
     }
 }

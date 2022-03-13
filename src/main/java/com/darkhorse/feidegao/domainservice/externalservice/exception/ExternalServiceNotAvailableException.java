@@ -1,4 +1,4 @@
-package com.darkhorse.feidegao.infrastructure.externalserviceimpl.exception;
+package com.darkhorse.feidegao.domainservice.externalservice.exception;
 
 public class ExternalServiceNotAvailableException extends RuntimeException {
 }

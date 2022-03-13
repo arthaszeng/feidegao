@@ -26,4 +26,8 @@ public class PassengerEntity {
     public static PassengerEntity from(Passenger passenger) {
         return new PassengerEntity(passenger.getId(), passenger.getName(), passenger.getIdNumber());
     }
+
+    public static Passenger to(PassengerEntity passengerEntity) {
+        return new Passenger(passengerEntity.getId(), passengerEntity.getName(), passengerEntity.getIdNumber());
+    }
 }

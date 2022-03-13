@@ -25,4 +25,8 @@ public class ContactorEntity {
     public static ContactorEntity form(Contactor contactor) {
         return new ContactorEntity(contactor.getId(), contactor.getPhoneNumber());
     }
+
+    public static Contactor to(ContactorEntity contactorEntity) {
+        return new Contactor(contactorEntity.getId(), contactorEntity.getPhoneNumber());
+    }
 }

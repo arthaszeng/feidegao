@@ -1,7 +1,7 @@
 package com.darkhorse.feidegao.infrastructure.config;
 
-import com.darkhorse.feidegao.infrastructure.externalserviceimpl.exception.ExternalServiceNotAvailableException;
-import com.darkhorse.feidegao.infrastructure.externalserviceimpl.exception.InvalidRequestException;
+import com.darkhorse.feidegao.domainservice.externalservice.exception.ExternalServiceNotAvailableException;
+import com.darkhorse.feidegao.domainservice.externalservice.exception.InvalidRequestException;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestExecution;

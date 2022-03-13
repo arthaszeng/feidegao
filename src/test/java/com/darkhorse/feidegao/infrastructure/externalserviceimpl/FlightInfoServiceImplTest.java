@@ -1,8 +1,8 @@
 package com.darkhorse.feidegao.infrastructure.externalserviceimpl;
 
 import com.darkhorse.feidegao.domainmodel.FlightInfo;
-import com.darkhorse.feidegao.infrastructure.externalserviceimpl.exception.ExternalServiceNotAvailableException;
-import com.darkhorse.feidegao.infrastructure.externalserviceimpl.exception.InvalidRequestException;
+import com.darkhorse.feidegao.domainservice.externalservice.exception.ExternalServiceNotAvailableException;
+import com.darkhorse.feidegao.domainservice.externalservice.exception.InvalidRequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.junit.jupiter.api.Test;

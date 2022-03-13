@@ -1,6 +1,9 @@
 package com.darkhorse.feidegao.infrastructure.repositoryimpl.entity;
 
+import com.darkhorse.feidegao.domainmodel.AircraftCabin;
+import com.darkhorse.feidegao.domainmodel.Contactor;
 import com.darkhorse.feidegao.domainmodel.Order;
+import com.darkhorse.feidegao.domainmodel.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,8 +41,14 @@ public class OrderEntity {
     @Column(name = "amount")
     private int amount;
 
+    private String status;
+
     @Column(name = "created_at", updatable = false)
     private Instant createdAt;
+
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "payment_id")
+    private PaymentEntity paymentEntity;
 
     public static OrderEntity from(Order order) {
         return new OrderEntity(
@@ -49,7 +58,23 @@ public class OrderEntity {
                 order.getProposalId(),
                 order.getPrice(),
                 order.getAmount(),
-                order.getCreatedAt()
+                order.getStatus().toString(),
+                order.getCreatedAt(),
+                PaymentEntity.from(order.getPaymentRequest())
+        );
+    }
+
+    public static Order to(OrderEntity orderEntity) {
+        return new Order(
+                orderEntity.getId(),
+                ContactorEntity.to(orderEntity.getContactor()),
+                orderEntity.getPassengers().stream().map(PassengerEntity::to).collect(Collectors.toList()),
+                orderEntity.getProposalId(),
+                orderEntity.getPrice(),
+                orderEntity.getAmount(),
+                OrderStatus.valueOf(orderEntity.getStatus()),
+                orderEntity.getCreatedAt(),
+                PaymentEntity.to(orderEntity.getPaymentEntity())
         );
     }
 }

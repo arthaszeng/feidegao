@@ -1,4 +1,4 @@
-package com.darkhorse.feidegao.infrastructure.externalserviceimpl.model;
+package com.darkhorse.feidegao.domainservice.externalservice.model;
 
 import com.darkhorse.feidegao.domainmodel.AircraftCabin;
 import com.darkhorse.feidegao.domainmodel.PositionAndPrice;

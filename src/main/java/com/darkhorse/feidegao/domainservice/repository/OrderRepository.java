@@ -4,4 +4,6 @@ import com.darkhorse.feidegao.domainmodel.Order;
 
 public interface OrderRepository {
     void save(Order order);
+
+    Order getOrderById(String id);
 }

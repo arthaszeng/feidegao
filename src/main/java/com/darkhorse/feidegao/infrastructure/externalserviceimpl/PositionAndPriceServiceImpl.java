@@ -2,7 +2,7 @@ package com.darkhorse.feidegao.infrastructure.externalserviceimpl;
 
 import com.darkhorse.feidegao.domainmodel.PositionAndPrice;
 import com.darkhorse.feidegao.domainservice.externalservice.PositionAndPriceService;
-import com.darkhorse.feidegao.infrastructure.externalserviceimpl.model.PositionAndPriceResponse;
+import com.darkhorse.feidegao.domainservice.externalservice.model.PositionAndPriceResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

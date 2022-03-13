@@ -2,7 +2,7 @@ package com.darkhorse.feidegao.infrastructure.externalserviceimpl;
 
 import com.darkhorse.feidegao.domainmodel.FlightInfo;
 import com.darkhorse.feidegao.domainservice.externalservice.FlightInfoService;
-import com.darkhorse.feidegao.infrastructure.externalserviceimpl.model.FlightResponse;
+import com.darkhorse.feidegao.domainservice.externalservice.model.FlightResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
